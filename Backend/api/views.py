@@ -6,10 +6,18 @@ from rest_framework.response import Response
 
 from products.models import Product
 from products.serializers import ProductSerializer
+from rest_framework import status
 
 
-@api_view(["GET"])
+@api_view(["GET","POST"])
 def api_home(request,*args,**kwargs):
+     if request.method == "POST":
+          serializer = ProductSerializer(data = request.data)
+          if serializer.is_valid():
+               serializer.save()
+               return Response(serializer.data, status=status.HTTP_201_CREATED)
+          return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+     
      instance = Product.objects.all().order_by("?").first()
      data = {}
      if instance:
