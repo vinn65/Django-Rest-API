@@ -5,21 +5,25 @@ from rest_framework.response import Response
 from . models import Product
 from . serializers import ProductSerializer
 from django.shortcuts import get_object_or_404
+from . permissions import IsStaffEditorPermission
 
 class ProductListCreateAPIView(generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     authentication_classes = [authentication.SessionAuthentication]
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [IsStaffEditorPermission]
 
 product_list_create_view = ProductListCreateAPIView.as_view()
 class ProductDetailAPIView(generics.RetrieveAPIView):
+    permission_classes = [IsStaffEditorPermission]
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+
 
 product_detail_view = ProductDetailAPIView.as_view()
 
 class ProductUpdateAPIView(generics.UpdateAPIView):
+    permission_classes = [IsStaffEditorPermission]
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     lookup_field = "pk"
