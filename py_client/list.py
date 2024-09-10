@@ -1,9 +1,21 @@
 import requests
+from getpass import getpass
 
-endpoint =  "http://127.0.0.1:8000/api/products/"
+auth_endpoint =  "http://127.0.0.1:8000/auth/"
+username = input("What is your username:\n")
+password = getpass("Enter password:\n")
+auth_response = requests.post(auth_endpoint, json={
+    'username': username, 'password': password
+})
 
-get_response = requests.get(endpoint)
+print(auth_response.json())
+if auth_response == 200:
+    token = auth_response.json()['token']
+    headers = {
+        "Authorization":f"Bearer {token} "
+    }
+    endpoint =  "http://127.0.0.1:8000/api/products/"
 
-print(get_response.json())
-# print(get_repsonse.text)
-# print(get_repsonse.status_code)
+    get_response = requests.get(endpoint, headers=headers)
+
+    print(get_response.json())
