@@ -2,7 +2,7 @@ from rest_framework import permissions
 
 class IsStaffEditorPermission(permissions.DjangoModelPermissions):
     perms_map = {
-        'GET': [],
+        'GET': ['%(app_label)s.view_%(model_name)s'], 
         'OPTIONS': [],
         'HEAD': [],
         'POST': ['%(app_label)s.add_%(model_name)s'],
@@ -12,7 +12,7 @@ class IsStaffEditorPermission(permissions.DjangoModelPermissions):
     }
 
 
-        # user = request.user
+        # user = reaquest.user
         # print(user.get_all_permissions)
         # if user.is_authenticated and user.is_staff:
         #     if user.has_perm("products.add_product"):
